@@ -1,0 +1,1659 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Campeonato Caruaruense de Tênis de Mesa — AMIP 2026</title>
+<style>
+  /* ===== Variáveis e Reset (INALTERADO) ===== */
+  :root{
+    --azul:#0d3b66; --azul-claro:#1d6fb8;
+    --verde:#2e8b57; --amarelo:#e0a800; --vermelho:#c0392b;
+    --cinza-bg:#f4f6f9; --cinza-linha:#e6e9ef;
+    --texto:#222; --branco:#fff;
+    --sombra:0 4px 14px rgba(0,0,0,.08);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:'Segoe UI', Tahoma, Verdana, sans-serif;
+    background:var(--cinza-bg); color:var(--texto);
+    padding:24px 16px 60px; line-height:1.5;
+  }
+  .container{max-width:1200px;margin:0 auto}
+
+  header{
+    background:linear-gradient(135deg, var(--azul), var(--azul-claro));
+    color:var(--branco); padding:28px 24px;
+    border-radius:14px; box-shadow:var(--sombra);
+    margin-bottom:28px; display:flex; justify-content:space-between;
+    align-items:center; flex-wrap:wrap; gap:16px;
+  }
+  header h1{font-size:1.6rem;letter-spacing:.3px}
+  header p{opacity:.9;font-size:.92rem;margin-top:4px}
+  .btn-print{
+    background:var(--branco); color:var(--azul); border:none;
+    padding:10px 20px; border-radius:8px; font-weight:600;
+    cursor:pointer; transition:.2s;
+  }
+  .btn-print:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.2)}
+
+  .config-bar{
+    display:flex; flex-wrap:wrap; align-items:center; gap:12px;
+    padding:14px 20px; margin-bottom:16px;
+    background:var(--branco); border-radius:14px;
+    box-shadow:var(--sombra);
+  }
+  .config-label{font-weight:600;color:var(--azul);font-size:.92rem}
+  .btn-config{
+    background:var(--azul); color:#fff; border:none;
+    padding:10px 18px; border-radius:8px; font-weight:600;
+    cursor:pointer; transition:.2s; font-family:inherit; font-size:.85rem;
+    display:inline-flex; align-items:center; gap:6px;
+  }
+  .btn-config:hover{
+    background:var(--azul-claro); transform:translateY(-2px);
+    box-shadow:0 6px 18px rgba(13,59,102,.25);
+  }
+
+  .tabs{
+    display:flex; flex-wrap:wrap; gap:8px;
+    margin-bottom:16px; padding:12px;
+    background:var(--branco); border-radius:14px;
+    box-shadow:var(--sombra);
+  }
+  .tab{
+    padding:10px 18px; border-radius:8px;
+    border:2px solid var(--cinza-linha);
+    background:var(--cinza-bg); color:var(--texto);
+    cursor:pointer; font-weight:600; font-size:.85rem;
+    transition:.2s; font-family:inherit;
+  }
+  .tab:hover{background:#e6eef8;border-color:var(--azul-claro)}
+  .tab.active{
+    background:var(--azul); color:#fff;
+    border-color:var(--azul-claro);
+    box-shadow:0 4px 12px rgba(13,59,102,.3);
+  }
+
+  .hint{
+    background:#fffbea; border-left:4px solid var(--amarelo);
+    padding:10px 16px; border-radius:6px;
+    font-size:.85rem; color:#6b5b1f;
+    margin-bottom:20px;
+  }
+
+  .cat-controls{
+    display:flex; justify-content:space-between; align-items:center;
+    margin-bottom:20px; padding:14px 20px;
+    background:var(--branco); border-radius:14px;
+    box-shadow:var(--sombra); flex-wrap:wrap; gap:12px;
+  }
+  .cat-info{font-weight:600;color:var(--azul);font-size:.95rem}
+  .cat-badge{
+    display:inline-block; margin-left:8px; padding:2px 8px;
+    background:#e6eef8; color:var(--azul);
+    border-radius:4px; font-size:.75rem; font-weight:600;
+  }
+  .btn-edit{
+    background:var(--amarelo); color:#fff; border:none;
+    padding:10px 20px; border-radius:8px; font-weight:600;
+    cursor:pointer; transition:.2s; font-family:inherit; font-size:.88rem;
+  }
+  .btn-edit:hover{
+    background:#c99200; transform:translateY(-2px);
+    box-shadow:0 6px 18px rgba(0,0,0,.15);
+  }
+  .btn-edit.ativo{background:var(--verde)}
+  .btn-edit.ativo:hover{background:#236b44}
+
+  .btn-edit.btn-atletas{background:var(--azul-claro)}
+  .btn-edit.btn-atletas:hover{background:#185a97}
+
+  [contenteditable="true"]{
+    outline:2px dashed var(--amarelo); outline-offset:3px;
+    background:#fffbea; padding:2px 6px; border-radius:4px;
+    cursor:text; min-width:40px; display:inline-block;
+  }
+  td.cel-num[contenteditable="true"]{
+    display:table-cell; min-width:auto;
+    padding:10px 8px; border-radius:0; outline-offset:-3px;
+  }
+
+  section{
+    background:var(--branco); border-radius:14px;
+    box-shadow:var(--sombra); padding:22px 24px;
+    margin-bottom:26px; overflow:hidden;
+  }
+  section h2{
+    font-size:1.15rem; color:var(--azul);
+    border-left:5px solid var(--azul-claro);
+    padding-left:12px; margin-bottom:16px;
+  }
+  .tabela-wrap{overflow-x:auto}
+  table{
+    width:100%; border-collapse:collapse;
+    font-size:.9rem; min-width:820px;
+  }
+  thead th{
+    background:var(--azul); color:var(--branco);
+    padding:10px 8px; font-weight:600; text-align:center;
+    font-size:.8rem; letter-spacing:.4px; text-transform:uppercase;
+    position:sticky; top:0;
+  }
+  thead th:nth-child(2){text-align:left}
+  tbody td{
+    padding:10px 8px; text-align:center;
+    border-bottom:1px solid var(--cinza-linha);
+  }
+  tbody td:nth-child(2){text-align:left;font-weight:600}
+  tbody tr:hover{background:#f0f6ff}
+  .pos{font-weight:700;color:var(--azul)}
+  .pts{font-weight:700;color:var(--azul-claro);font-size:1rem}
+  .saldo{color:#555;font-style:italic}
+  tr.classificado{background:rgba(46,139,87,.08)}
+  tr.classificado td:first-child{border-left:4px solid var(--verde)}
+  tr.repescagem{background:rgba(224,168,0,.08)}
+  tr.repescagem td:first-child{border-left:4px solid var(--amarelo)}
+  tr.eliminado td:first-child{border-left:4px solid var(--vermelho)}
+
+  section[data-tabela="jogos"]{border-left:5px solid var(--verde)}
+  section[data-tabela="jogos"] h2{color:var(--verde); border-left-color:var(--verde)}
+  .jogo-vencedor{font-weight:700;color:var(--verde)}
+
+  /* ===== Tabela de Jogos — colunas dinâmicas de set ===== */
+  section[data-tabela="jogos"] table{ min-width: 900px; }
+  td.cel-set{
+    font-family: monospace;
+    font-size: .82rem;
+    white-space: nowrap;
+    text-align: center;
+    padding: 8px 4px;
+  }
+  td.cel-set.cel-vazio{
+    color: #ccc;
+    font-style: italic;
+  }
+  td.cel-set:not(.cel-vazio){
+    color: var(--azul);
+    font-weight: 600;
+  }
+  td.cel-set[contenteditable="true"]{
+    display: table-cell;
+    min-width: 40px;
+    padding: 8px 4px;
+    border-radius: 0;
+    outline-offset: -2px;
+  }
+  tr.jogo-encerrado{ background: rgba(46,139,87,.05); }
+
+  .bracket{
+    display:grid; grid-template-columns:repeat(3,1fr);
+    gap:24px; align-items:center;
+  }
+  .rodada h3{
+    text-align:center; font-size:.85rem; color:var(--azul-claro);
+    text-transform:uppercase; letter-spacing:.8px; margin-bottom:14px;
+  }
+  .partida{
+    background:var(--cinza-bg); border:1px solid var(--cinza-linha);
+    border-radius:10px; padding:10px 14px; margin-bottom:14px;
+    font-size:.88rem; transition:.2s;
+  }
+  .partida:hover{border-color:var(--azul-claro);transform:translateX(3px)}
+  .partida .jogador{display:flex;justify-content:space-between;padding:3px 0;align-items:center}
+  .partida .jogador.vencedor{font-weight:700;color:var(--verde)}
+  .partida .jogador .sets{
+    background:var(--branco); border-radius:4px;
+    padding:0 6px; font-family:monospace;
+  }
+  .partida.partida-bye{
+    background:#f8f8f8; border-style:dashed; opacity:.75;
+    font-style:italic; text-align:center; color:#888;
+  }
+  .final-box{
+    background:linear-gradient(135deg,#fff8e1,#ffe082);
+    border:2px solid var(--amarelo); text-align:center;
+    padding:18px 14px; border-radius:10px; margin-bottom:14px;
+  }
+  .final-box .titulo{
+    font-weight:700; color:var(--amarelo);
+    text-transform:uppercase; font-size:.8rem;
+    letter-spacing:1px; margin-bottom:8px;
+  }
+
+  .legenda{
+    display:flex; flex-wrap:wrap; gap:18px;
+    margin-top:16px; font-size:.82rem;
+  }
+  .legenda span{display:flex;align-items:center;gap:6px}
+  .dot{width:14px;height:14px;border-radius:4px;display:inline-block}
+  .dot.class{background:var(--verde)}
+  .dot.rep{background:var(--amarelo)}
+  .dot.elim{background:var(--vermelho)}
+  .criterios{
+    font-size:.85rem; background:#f8fbff;
+    border-left:4px solid var(--azul-claro);
+    padding:12px 18px; border-radius:6px; margin-top:16px;
+  }
+  .criterios ol{margin-left:20px;margin-top:6px}
+  .criterios li{margin-bottom:4px}
+
+  .modal-overlay{
+    position:fixed; top:0; left:0; right:0; bottom:0;
+    background:rgba(13,59,102,.55); z-index:1000;
+    display:flex; align-items:center; justify-content:center;
+    padding:20px; backdrop-filter:blur(2px);
+  }
+  .modal{
+    background:var(--branco); border-radius:14px;
+    max-width:600px; width:100%; max-height:90vh;
+    display:flex; flex-direction:column;
+    box-shadow:0 20px 60px rgba(0,0,0,.35);
+    overflow:hidden;
+  }
+  .modal-header{
+    padding:18px 24px; border-bottom:1px solid var(--cinza-linha);
+    display:flex; justify-content:space-between; align-items:center;
+    background:linear-gradient(135deg, var(--azul), var(--azul-claro));
+    color:var(--branco);
+  }
+  .modal-header h3{font-size:1.05rem; letter-spacing:.3px}
+  .modal-close{
+    background:rgba(255,255,255,.15); border:none; color:var(--branco);
+    font-size:1.2rem; cursor:pointer; padding:4px 10px;
+    border-radius:6px; line-height:1; transition:.2s; font-family:inherit;
+  }
+  .modal-close:hover{background:rgba(255,255,255,.3)}
+  .modal-body{padding:20px 24px; overflow-y:auto; flex:1}
+  .modal-body label.modal-field{
+    display:flex; align-items:center; gap:10px;
+    font-weight:600; color:var(--azul);
+    margin-bottom:18px; font-size:.9rem; flex-wrap:wrap;
+  }
+  .modal-body input[type="number"]{
+    width:90px; padding:8px 12px; border:2px solid var(--cinza-linha);
+    border-radius:6px; font-family:inherit; font-size:.95rem;
+  }
+  .modal-body input[type="number"]:focus{outline:none; border-color:var(--azul-claro)}
+  .modal-body select{
+    padding:8px 12px; border:2px solid var(--cinza-linha);
+    border-radius:6px; font-family:inherit; font-size:.95rem;
+    background:var(--branco);
+  }
+  .modal-body select:focus{outline:none; border-color:var(--azul-claro)}
+  .modal-lista-titulo{
+    font-weight:600; color:var(--azul); font-size:.9rem;
+    margin-bottom:10px; border-top:1px solid var(--cinza-linha);
+    padding-top:16px;
+  }
+  .nome-input-row{
+    display:flex; align-items:center; gap:10px; margin-bottom:8px;
+  }
+  .nome-input-label{
+    font-weight:600; color:var(--azul); font-size:.82rem;
+    min-width:44px; text-align:right; font-family:monospace;
+  }
+  .nome-input{
+    flex:1; padding:8px 12px; border:2px solid var(--cinza-linha);
+    border-radius:6px; font-family:inherit; font-size:.9rem;
+  }
+  .nome-input:focus{outline:none; border-color:var(--azul-claro); background:#f0f6ff}
+  .modal-footer{
+    padding:14px 24px; border-top:1px solid var(--cinza-linha);
+    display:flex; justify-content:flex-end; gap:10px;
+    background:var(--cinza-bg);
+  }
+  .btn-modal{
+    padding:10px 20px; border-radius:8px; font-weight:600;
+    cursor:pointer; transition:.2s; font-family:inherit; font-size:.88rem;
+    border:none;
+  }
+  .btn-modal.cancelar{background:#e0e0e0; color:#555}
+  .btn-modal.cancelar:hover{background:#c8c8c8}
+  .btn-modal.salvar{background:var(--verde); color:#fff}
+  .btn-modal.salvar:hover{background:#236b44; transform:translateY(-1px)}
+  .link-restaurar{
+    display:block; margin-top:8px; text-align:center;
+    color:var(--azul-claro); font-size:.85rem;
+    text-decoration:none; transition:.2s;
+  }
+  .link-restaurar:hover{text-decoration:underline}
+
+  @media print{
+    body{background:var(--branco);padding:0}
+    .btn-print, .tabs, .hint, .cat-controls, .config-bar, .modal-overlay{display:none !important}
+    section{box-shadow:none;border:1px solid #ddd;page-break-inside:avoid}
+    thead th{background:#eee !important;color:#000 !important}
+  }
+  @media (max-width:780px){
+    header{flex-direction:column;align-items:flex-start}
+    .bracket{grid-template-columns:1fr;gap:18px}
+    .rodada h3{margin-top:10px}
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <div>
+      <h1>🏓 Campeonato Caruaruense de Tênis de Mesa</h1>
+      <p class="sub">AMIP — Associação dos Mesatenistas do Interior de Pernambuco · Edição 2026</p>
+    </div>
+    <button class="btn-print" onclick="window.print()">🖨️ Imprimir / PDF</button>
+  </header>
+
+  <div class="config-bar">
+    <span class="config-label">⚙️ Configuração do Campeonato:</span>
+    <button class="btn-config" onclick="definirQtdCategorias()"
+            title="Define a quantidade de categorias e zera a tabela">
+      🎯 Quantidade de Categorias
+    </button>
+  </div>
+
+  <nav class="tabs" id="tabs" aria-label="Categorias"></nav>
+
+  <div class="hint" id="hint">
+    💡 Configure cada categoria em <strong>🎮 Sets e Pontos</strong> (no painel da própria categoria). A Tabela de Jogos mostra
+    uma coluna para cada set possível (formato <code>P1-P2</code>, ex.: <code>11-8</code>).
+    Em <strong>✏️ Editar Categoria</strong>, clique numa célula de set, digite o placar e clique em
+    <strong>💾 Salvar Alterações</strong>. A Fase de Grupos é recalculada automaticamente.
+  </div>
+
+  <main id="conteudo"></main>
+
+</div>
+
+<!-- ============ MODAL: DEFINIR ATLETAS ============ -->
+<div class="modal-overlay" id="modal-atletas" style="display:none"
+     onclick="if(event.target === this) fecharModalAtletas()">
+  <div class="modal" role="dialog" aria-modal="true">
+    <div class="modal-header">
+      <h3>👥 Definir Atletas — <span id="modal-cat-nome"></span></h3>
+      <button class="modal-close" onclick="fecharModalAtletas()" aria-label="Fechar">✕</button>
+    </div>
+    <div class="modal-body">
+      <label class="modal-field">
+        Quantidade de atletas desta categoria (2 a 32):
+        <input type="number" id="modal-qtd-atletas" min="2" max="32"
+               oninput="atualizarListaNomes()">
+      </label>
+      <div class="modal-lista-titulo">✍️ Nome dos atletas:</div>
+      <div id="modal-lista-nomes"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-modal cancelar" onclick="fecharModalAtletas()">Cancelar</button>
+      <button class="btn-modal salvar" onclick="salvarModalAtletas()">🎲 Salvar e Sortear Jogos</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ MODAL: SETS E PONTOS (por categoria) ============ -->
+<div class="modal-overlay" id="modal-config" style="display:none"
+     onclick="if(event.target === this) fecharModalConfig()">
+  <div class="modal" role="dialog" aria-modal="true">
+    <div class="modal-header">
+      <h3>🎮 Sets e Pontos — <span id="modal-config-cat-nome">—</span></h3>
+      <button class="modal-close" onclick="fecharModalConfig()" aria-label="Fechar">✕</button>
+    </div>
+    <div class="modal-body">
+      <label class="modal-field">
+        Formato da partida:
+        <select id="modal-sets">
+          <option value="1">Melhor de 1 (set único)</option>
+          <option value="3">Melhor de 3</option>
+          <option value="5">Melhor de 5 (padrão ITTF)</option>
+          <option value="7">Melhor de 7</option>
+          <option value="9">Melhor de 9</option>
+        </select>
+      </label>
+      <label class="modal-field">
+        Pontos por set:
+        <input type="number" id="modal-pontos" min="5" max="50" value="11">
+      </label>
+      <div class="hint" style="margin-top:8px;margin-bottom:0">
+        💡 Esta configuração se aplica <strong>exclusivamente a esta categoria</strong>.
+        A quantidade de colunas de sets na Tabela de Jogos corresponde ao formato escolhido.
+      </div>
+      <a href="#" class="link-restaurar" onclick="restaurarConfigPadrao(); return false;">
+        ↺ Restaurar padrão desta categoria (Melhor de 5 · 11 pontos)
+      </a>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-modal cancelar" onclick="fecharModalConfig()">Cancelar</button>
+      <button class="btn-modal salvar" onclick="salvarModalConfig()">💾 Salvar Configuração</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   UTILITÁRIOS
+   ============================================================ */
+const STORAGE_KEY = 'amip-campeonato-tm-2026';
+
+function esc(s){
+  return String(s).replace(/[&<>"']/g, c => (
+    {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]
+  ));
+}
+
+let __idCounter = 0;
+function newAthleteId(){
+  __idCounter++;
+  return 'at-' + Date.now() + '-' + __idCounter + '-' + Math.random().toString(36).substr(2, 4);
+}
+
+function makeAthlete(nome, clube, existingId, stats){
+  return {
+    id: existingId || newAthleteId(),
+    nome: nome,
+    clube: clube || '—',
+    j:   (stats && stats.j)   || 0,
+    v:   (stats && stats.v)   || 0,
+    d:   (stats && stats.d)   || 0,
+    sp:  (stats && stats.sp)  || 0,
+    sc:  (stats && stats.sc)  || 0,
+    pp:  (stats && stats.pp)  || 0,
+    pc:  (stats && stats.pc)  || 0,
+    pts: (stats && stats.pts) || 0,
+    status: (stats && stats.status) || 'eliminado'
+  };
+}
+
+function cmpAtletas(a, b){
+  const pa = a.pts||0, pb = b.pts||0;
+  if(pb !== pa) return pb - pa;
+  const va = a.v||0, vb = b.v||0;
+  if(vb !== va) return vb - va;
+  const sa = (a.sp||0)-(a.sc||0), sb = (b.sp||0)-(b.sc||0);
+  if(sb !== sa) return sb - sa;
+  return ((b.pp||0)-(b.pc||0)) - ((a.pp||0)-(a.pc||0));
+}
+
+function nomePorId(grupo, id){
+  const at = grupo.atletas.find(a => a.id === id);
+  return at ? at.nome : '(?)';
+}
+
+function defaultConfig(){
+  return { setsPorPartida: 5, pontosPorSet: 11 };
+}
+function getCatConfig(cat){
+  return (cat && cat.config) ? cat.config : defaultConfig();
+}
+
+/* ============================================================
+   PARSER ROBUSTO
+   ============================================================ */
+function parseSetCell(text){
+  if(text == null) return null;
+  const normalized = String(text)
+    .replace(/[\u2013\u2014\u2212]/g, '-')
+    .replace(/[xX×]/g, '-')
+    .replace(/:/g, '-')
+    .replace(/\//g, '-')
+    .replace(/\s+/g, ' ')
+    .trim();
+  const match = normalized.match(/(\d+)\s*-\s*(\d+)/);
+  if(!match) return null;
+  const p1 = parseInt(match[1], 10);
+  const p2 = parseInt(match[2], 10);
+  if(isNaN(p1) || isNaN(p2)) return null;
+  if(p1 < 0 || p2 < 0) return null;
+  if(p1 === 0 && p2 === 0) return null;
+  return {p1, p2};
+}
+
+/* ============================================================
+   AGREGADO DO JOGO
+   ============================================================ */
+function getGameAggregate(j){
+  if(j.sets && j.sets.length > 0){
+    let s1=0, s2=0, p1=0, p2=0;
+    j.sets.forEach(s => {
+      if(!s) return;
+      if(s.p1 === 0 && s.p2 === 0) return;
+      p1 += s.p1; p2 += s.p2;
+      if(s.p1 > s.p2) s1++;
+      else if(s.p2 > s.p1) s2++;
+    });
+    return {s1, s2, p1, p2};
+  }
+  return {s1: j.s1 || 0, s2: j.s2 || 0, p1: j.p1 || 0, p2: j.p2 || 0};
+}
+
+/* ============================================================
+   DISTRIBUIÇÃO + SORTEIO
+   ============================================================ */
+function calcularGrupos(total){
+  if(total < 2) return null;
+  if(total <= 5) return [total];
+  const numGroups = Math.ceil(total / 4);
+  const baseSize  = Math.floor(total / numGroups);
+  const remainder = total % numGroups;
+  return Array.from({length: numGroups}, (_, i) =>
+    baseSize + (i < remainder ? 1 : 0)
+  );
+}
+
+function gerarJogos(atletas){
+  const n = atletas.length;
+  if(n < 2) return [];
+  const lista = [...atletas];
+  for(let i = lista.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [lista[i], lista[j]] = [lista[j], lista[i]];
+  }
+  if(n % 2 === 1) lista.push(null);
+  const numRounds = lista.length - 1;
+  const half = lista.length / 2;
+  const jogos = [];
+  for(let r = 0; r < numRounds; r++){
+    for(let i = 0; i < half; i++){
+      const a = lista[i];
+      const b = lista[lista.length - 1 - i];
+      if(a && b){
+        jogos.push({
+          rodada: r + 1,
+          id1: a.id, id2: b.id,
+          sets: [],
+          s1: 0, s2: 0, p1: 0, p2: 0
+        });
+      }
+    }
+    lista.splice(1, 0, lista.pop());
+  }
+  return jogos;
+}
+
+/* ============================================================
+   RECÁLCULO — agrega a partir de sets
+   ============================================================ */
+function recalcularClassificacaoDoGrupo(grupo){
+  grupo.atletas.forEach(a => {
+    a.j = 0; a.v = 0; a.d = 0;
+    a.sp = 0; a.sc = 0; a.pp = 0; a.pc = 0; a.pts = 0;
+  });
+  if(!grupo.jogos || grupo.jogos.length === 0) return;
+  grupo.jogos.forEach(j => {
+    if(j.sets && j.sets.length > 0){
+      let s1=0, s2=0, p1=0, p2=0;
+      j.sets.forEach(s => {
+        if(!s) return;
+        if(s.p1 === 0 && s.p2 === 0) return;
+        p1 += s.p1; p2 += s.p2;
+        if(s.p1 > s.p2) s1++;
+        else if(s.p2 > s.p1) s2++;
+      });
+      j.s1 = s1; j.s2 = s2; j.p1 = p1; j.p2 = p2;
+    } else {
+      j.s1 = 0; j.s2 = 0; j.p1 = 0; j.p2 = 0;
+    }
+    if(j.s1 === 0 && j.s2 === 0) return;
+    const at1 = grupo.atletas.find(a => a.id === j.id1);
+    const at2 = grupo.atletas.find(a => a.id === j.id2);
+    if(!at1 || !at2) return;
+    at1.j++; at2.j++;
+    at1.sp += j.s1; at1.sc += j.s2;
+    at2.sp += j.s2; at2.sc += j.s1;
+    at1.pp += j.p1; at1.pc += j.p2;
+    at2.pp += j.p2; at2.pc += j.p1;
+    if(j.s1 > j.s2){
+      at1.v++; at2.d++;
+      at1.pts += 2; at2.pts += 1;
+    } else if(j.s2 > j.s1){
+      at2.v++; at1.d++;
+      at2.pts += 2; at1.pts += 1;
+    }
+  });
+}
+
+/* ============================================================
+   PRESETS
+   ============================================================ */
+function makeCategory(id, nome, nomes, clubes, placarFinal){
+  const ga = nomes.grupoA, gb = nomes.grupoB;
+  const grupoA = [
+    makeAthlete(ga[0], clubes[0], null, {j:3,v:3,d:0, sp:9,sc:2, pp:112,pc:78,  pts:6, status:'classificado'}),
+    makeAthlete(ga[1], clubes[1], null, {j:3,v:2,d:1, sp:7,sc:5, pp:108,pc:99,  pts:5, status:'classificado'}),
+    makeAthlete(ga[2], clubes[2], null, {j:3,v:1,d:2, sp:5,sc:7, pp:95, pc:104, pts:4, status:'repescagem'}),
+    makeAthlete(ga[3], clubes[3], null, {j:3,v:0,d:3, sp:2,sc:9, pp:74, pc:108, pts:3, status:'eliminado'})
+  ];
+  const grupoB = [
+    makeAthlete(gb[0], clubes[3], null, {j:3,v:3,d:0, sp:9,sc:3, pp:115,pc:92,  pts:6, status:'classificado'}),
+    makeAthlete(gb[1], clubes[0], null, {j:3,v:2,d:1, sp:7,sc:4, pp:104,pc:96,  pts:5, status:'classificado'}),
+    makeAthlete(gb[2], clubes[2], null, {j:3,v:1,d:2, sp:4,sc:7, pp:92, pc:101, pts:4, status:'repescagem'}),
+    makeAthlete(gb[3], clubes[1], null, {j:3,v:0,d:3, sp:3,sc:9, pp:88, pc:110, pts:3, status:'eliminado'})
+  ];
+  return {
+    id, nome,
+    config: defaultConfig(),
+    grupos: [
+      {nome:'Grupo A', atletas:grupoA, jogos: gerarJogos(grupoA)},
+      {nome:'Grupo B', atletas:grupoB, jogos: gerarJogos(grupoB)}
+    ],
+    semifinais: [
+      {j1:ga[0], s1:4, j2:gb[1], s2:1, vencedor:1, finalDireta:false, bye:false},
+      {j1:gb[0], s1:2, j2:ga[1], s2:4, vencedor:2, finalDireta:false, bye:false}
+    ],
+    terceiro: {j1:gb[1], s1:4, j2:gb[0], s2:2, vencedor:1, fixed:false},
+    final: {j1:ga[0], s1:4, j2:ga[1], s2:3, vencedor:1, placar:placarFinal, fixed:false}
+  };
+}
+
+function makeZeroedCategory(id, nome, groupSizes){
+  const grupos = groupSizes.map((size, gi) => {
+    const letra = String.fromCharCode(65 + gi);
+    const atletas = Array.from({length: size}, (_, i) =>
+      makeAthlete(`Atleta ${letra}${i+1}`, '—')
+    );
+    atletas.forEach((a, i) => {
+      if(i < 2) a.status = 'classificado';
+      else if(i === 2) a.status = 'repescagem';
+      else a.status = 'eliminado';
+    });
+    return { nome: `Grupo ${letra}`, atletas, jogos: gerarJogos(atletas) };
+  });
+  const cat = {
+    id, nome,
+    config: defaultConfig(),
+    grupos,
+    semifinais: [
+      {j1:'— A definir —', s1:0, j2:'— A definir —', s2:0, vencedor:0, finalDireta:false, bye:false},
+      {j1:'— A definir —', s1:0, j2:'— A definir —', s2:0, vencedor:0, finalDireta:false, bye:false}
+    ],
+    terceiro: {j1:'— A definir —', s1:0, j2:'— A definir —', s2:0, vencedor:0, fixed:false},
+    final: {j1:'— A definir —', s1:0, j2:'— A definir —', s2:0, vencedor:0, placar:'—', fixed:false}
+  };
+  const semis = computeSemifinalTeams(cat);
+  semis.forEach((s, i) => {
+    cat.semifinais[i].j1 = s.j1;
+    cat.semifinais[i].j2 = s.j2;
+    cat.semifinais[i].finalDireta = s.finalDireta || false;
+    cat.semifinais[i].bye = s.bye || false;
+    cat.semifinais[i].byeJogador = s.byeJogador;
+  });
+  return cat;
+}
+
+const clubesPadrao = ['AMIP Caruaru','CT Recife','APM Garanhuns','CT Olinda'];
+
+let CATEGORIAS = [
+  makeCategory('sub13','Sub-13 Masculino',
+    {grupoA:['Atleta Sub-13 A1','Atleta Sub-13 A2','Atleta Sub-13 A3','Atleta Sub-13 A4'],
+     grupoB:['Atleta Sub-13 B1','Atleta Sub-13 B2','Atleta Sub-13 B3','Atleta Sub-13 B4']},
+    clubesPadrao, '11-7 · 11-9 · 9-11 · 11-6 · 8-11 · 11-4'),
+  makeCategory('sub17','Sub-17 Masculino',
+    {grupoA:['Atleta Sub-17 A1','Atleta Sub-17 A2','Atleta Sub-17 A3','Atleta Sub-17 A4'],
+     grupoB:['Atleta Sub-17 B1','Atleta Sub-17 B2','Atleta Sub-17 B3','Atleta Sub-17 B4']},
+    clubesPadrao, '11-9 · 11-8 · 11-6 · 9-11 · 11-7'),
+  makeCategory('adultoM','Adulto Masculino',
+    {grupoA:['Severino Júnior','Carlos Eduardo','Marcos Vinícius','João Pedro Lima'],
+     grupoB:['Rafael Almeida','Anderson Souza','Felipe Barros','Lucas Gabriel']},
+    clubesPadrao, '11-8 · 9-11 · 11-7 · 8-11 · 11-9 · 9-11 · 11-6'),
+  makeCategory('adultoF','Adulto Feminino',
+    {grupoA:['Atleta Fem. A1','Atleta Fem. A2','Atleta Fem. A3','Atleta Fem. A4'],
+     grupoB:['Atleta Fem. B1','Atleta Fem. B2','Atleta Fem. B3','Atleta Fem. B4']},
+    clubesPadrao, '11-6 · 11-4 · 8-11 · 11-9 · 11-7'),
+  makeCategory('veterano','Veterano 40+',
+    {grupoA:['Atleta Vet. A1','Atleta Vet. A2','Atleta Vet. A3','Atleta Vet. A4'],
+     grupoB:['Atleta Vet. B1','Atleta Vet. B2','Atleta Vet. B3','Atleta Vet. B4']},
+    clubesPadrao, '9-11 · 11-8 · 11-6 · 11-9 · 8-11 · 11-7'),
+  makeCategory('paralimpico','Paralímpico',
+    {grupoA:['Atleta Par. A1','Atleta Par. A2','Atleta Par. A3','Atleta Par. A4'],
+     grupoB:['Atleta Par. B1','Atleta Par. B2','Atleta Par. B3','Atleta Par. B4']},
+    clubesPadrao, '11-5 · 11-7 · 11-9 · 9-11 · 11-4')
+];
+
+/* ============================================================
+   PERSISTÊNCIA
+   ============================================================ */
+function salvar(){
+  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(CATEGORIAS)); }
+  catch(e){ console.warn('Falha ao salvar:', e); }
+}
+function carregar(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(!raw) return;
+    const parsed = JSON.parse(raw);
+    if(Array.isArray(parsed) && parsed.length > 0
+       && parsed[0].id && parsed[0].grupos){
+      parsed.forEach(cat => {
+        if(!cat.config || typeof cat.config.setsPorPartida !== 'number'){
+          cat.config = defaultConfig();
+        }
+        (cat.grupos || []).forEach(g => {
+          if(!g.jogos) g.jogos = [];
+          g.jogos.forEach(j => { if(!j.sets) j.sets = []; });
+          (g.atletas || []).forEach(a => {
+            if(!a.id) a.id = newAthleteId();
+          });
+        });
+      });
+      CATEGORIAS = parsed;
+      if(!CATEGORIAS.find(c => c.id === activeTab)){
+        activeTab = CATEGORIAS[0].id;
+      }
+    }
+  }catch(e){ console.warn('Falha ao carregar:', e); }
+}
+
+/* ============================================================
+   CONFIGURAÇÃO — QUANTIDADE DE CATEGORIAS
+   ============================================================ */
+function getAtletasPorCategoria(){
+  if(!CATEGORIAS[0]) return 8;
+  return CATEGORIAS[0].grupos.reduce((sum, g) => sum + g.atletas.length, 0);
+}
+
+function definirQtdCategorias(){
+  const atual = CATEGORIAS.length;
+  const input = prompt(
+    `Quantas categorias deseja criar? (1 a 20)\n\nValor atual: ${atual}`,
+    atual
+  );
+  if(input === null) return;
+  const qtd = parseInt(input);
+  if(isNaN(qtd) || qtd < 1 || qtd > 20){
+    alert('Quantidade inválida. Informe um número inteiro entre 1 e 20.');
+    return;
+  }
+  const atletas = getAtletasPorCategoria();
+  if(!confirm(
+    `Isso vai APAGAR todos os dados atuais e reiniciar o campeonato\n` +
+    `com ${qtd} categoria(s), jogos sorteados e placares de set zerados.\n\n` +
+    `Deseja continuar?`
+  )) return;
+  regenerarCampeonato(qtd, atletas);
+}
+
+function regenerarCampeonato(numCategorias, numAtletas){
+  const sizes = calcularGrupos(numAtletas);
+  if(!sizes){
+    alert('Erro: número de atletas inválido.');
+    return;
+  }
+  const novas = [];
+  for(let i = 1; i <= numCategorias; i++){
+    novas.push(makeZeroedCategory(`cat${i}`, `Categoria ${i}`, sizes));
+  }
+  CATEGORIAS = novas;
+  activeTab = CATEGORIAS[0].id;
+  salvar();
+  renderAll();
+  const hint = document.getElementById('hint');
+  if(hint){
+    hint.innerHTML = `✅ Campeonato reiniciado: <strong>${numCategorias} categoria(s)</strong> ` +
+      `com jogos sorteados. Use <strong>🎮 Sets e Pontos</strong> para ajustar o formato e ` +
+      `<strong>✏️ Editar Categoria</strong> para preencher os placares de cada set.`;
+  }
+}
+
+/* ============================================================
+   MODAL CONFIG — POR CATEGORIA (INDIVIDUALIZADO)
+   ============================================================ */
+let currentConfigCatId = null;
+
+function abrirModalConfig(catId){
+  const cat = CATEGORIAS.find(c => c.id === catId);
+  if(!cat) return;
+  
+  currentConfigCatId = catId;
+
+  const btnBefore = document.getElementById(`btn-edit-${catId}`);
+  if(btnBefore && btnBefore.classList.contains('ativo')){
+    saveCategory(catId);
+    const btnAfter = document.getElementById(`btn-edit-${catId}`);
+    if(btnAfter && btnAfter.classList.contains('ativo')) return;
+  }
+
+  const cfg = getCatConfig(cat);
+  document.getElementById('modal-config-cat-nome').textContent = cat.nome;
+  document.getElementById('modal-sets').value = cfg.setsPorPartida;
+  document.getElementById('modal-pontos').value = cfg.pontosPorSet;
+  document.getElementById('modal-config').style.display = 'flex';
+  document.getElementById('modal-sets').focus();
+}
+
+function restaurarConfigPadrao(){
+  document.getElementById('modal-sets').value = 5;
+  document.getElementById('modal-pontos').value = 11;
+}
+
+function salvarModalConfig(){
+  const cat = CATEGORIAS.find(c => c.id === currentConfigCatId);
+  if(!cat) return;
+
+  const sets = parseInt(document.getElementById('modal-sets').value);
+  const pontos = parseInt(document.getElementById('modal-pontos').value);
+
+  if(isNaN(sets) || ![1,3,5,7,9].includes(sets)){
+    alert('Formato de partida inválido.');
+    return;
+  }
+  if(isNaN(pontos) || pontos < 5 || pontos > 50){
+    alert('Pontos por set inválido. Informe um número entre 5 e 50.');
+    return;
+  }
+
+  let violations = 0;
+  cat.grupos.forEach(g => {
+    (g.jogos || []).forEach(j => {
+      if(j.sets && j.sets.length > sets) violations++;
+    });
+  });
+
+  if(violations > 0){
+    if(!confirm(
+      `⚠️ A categoria "${cat.nome}" possui ${violations} jogo(s) ` +
+      `com mais de ${sets} sets lançados.\n\n` +
+      `Os sets excedentes serão removidos automaticamente.\n\n` +
+      `Deseja continuar?`
+    )) return;
+
+    cat.grupos.forEach(g => {
+      (g.jogos || []).forEach(j => {
+        if(j.sets && j.sets.length > sets){
+          j.sets = j.sets.slice(0, sets);
+          while(j.sets.length > 0 && j.sets[j.sets.length - 1] === null){
+            j.sets.pop();
+          }
+          let s1=0, s2=0, p1=0, p2=0;
+          j.sets.forEach(s => {
+            if(!s) return;
+            if(s.p1 === 0 && s.p2 === 0) return;
+            p1 += s.p1; p2 += s.p2;
+            if(s.p1 > s.p2) s1++; else if(s.p2 > s.p1) s2++;
+          });
+          j.s1=s1; j.s2=s2; j.p1=p1; j.p2=p2;
+        }
+      });
+      recalcularClassificacaoDoGrupo(g);
+    });
+  }
+
+  cat.config = { setsPorPartida: sets, pontosPorSet: pontos };
+  salvar();
+  fecharModalConfig();
+  renderAll();
+
+  const hint = document.getElementById('hint');
+  if(hint){
+    hint.innerHTML = `✅ Categoria <strong>${esc(cat.nome)}</strong>: ` +
+      `<strong>Melhor de ${sets}</strong> · <strong>${pontos} pts/set</strong>. ` +
+      `A Tabela de Jogos agora exibe ${sets} coluna(s) de set.`;
+  }
+}
+
+function fecharModalConfig(){
+  document.getElementById('modal-config').style.display = 'none';
+  currentConfigCatId = null;
+}
+
+/* ============================================================
+   CÁLCULO DAS SEMIFINAIS
+   ============================================================ */
+function computeSemifinalTeams(cat){
+  const grupos = cat.grupos;
+  const num = grupos.length;
+
+  if(num === 0){
+    return [
+      {j1:'— A definir —', j2:'— A definir —'},
+      {j1:'— A definir —', j2:'— A definir —'}
+    ];
+  }
+
+  if(num === 1){
+    const at = grupos[0].atletas;
+    const n = at.length;
+    if(n === 2){
+      return [
+        {j1: at[0].nome, j2: at[1].nome, finalDireta: true},
+        {j1: '— sem disputa —', j2: '— sem disputa —', bye: true}
+      ];
+    }
+    if(n === 3){
+      return [
+        {j1: at[1].nome, j2: at[2].nome},
+        {j1: at[0].nome, j2: '— BYE —', bye: true, byeJogador: at[0].nome}
+      ];
+    }
+    return [
+      {j1: at[0]?.nome || '— A definir —', j2: at[n-1]?.nome || '— A definir —'},
+      {j1: at[1]?.nome || '— A definir —', j2: at[n-2]?.nome || '— A definir —'}
+    ];
+  }
+
+  if(num === 2){
+    return [
+      {j1: grupos[0].atletas[0].nome, j2: grupos[1].atletas[1].nome},
+      {j1: grupos[1].atletas[0].nome, j2: grupos[0].atletas[1].nome}
+    ];
+  }
+
+  const winners = grupos.map(g => g.atletas[0]).sort(cmpAtletas);
+  const runners = grupos.map(g => g.atletas[1]).sort(cmpAtletas);
+  const four = [...winners, ...runners].slice(0, 4);
+  return [
+    {j1: four[0].nome, j2: four[3].nome},
+    {j1: four[1].nome, j2: four[2].nome}
+  ];
+}
+
+/* ============================================================
+   RENDERIZAÇÃO
+   ============================================================ */
+let activeTab = 'adultoM';
+
+function renderTabs(){
+  document.getElementById('tabs').innerHTML = CATEGORIAS.map(cat => `
+    <button class="tab ${cat.id === activeTab ? 'active' : ''}"
+            onclick="setActiveTab('${cat.id}')">${esc(cat.nome)}</button>
+  `).join('');
+}
+
+function renderJogosTable(grupo, gi, catConfig){
+  if(!grupo.jogos || grupo.jogos.length === 0) return '';
+  const cfg = catConfig || defaultConfig();
+  const maxSets = cfg.setsPorPartida;
+  const needed = Math.floor(maxSets / 2) + 1;
+
+  const encerrados = grupo.jogos.filter(j => {
+    const agg = getGameAggregate(j);
+    return agg.s1 >= needed || agg.s2 >= needed;
+  }).length;
+
+  const setHeaders = Array.from({length: maxSets}, (_, i) => `<th>Set ${i+1}</th>`).join('');
+
+  return `
+    <section data-tabela="jogos" data-grupo="${gi}" data-max-sets="${maxSets}">
+      <h2>
+        🎲 Tabela de Jogos — ${esc(grupo.nome)}
+        <span style="font-weight:400;font-size:.8rem;color:#666;margin-left:8px">
+          · ${encerrados}/${grupo.jogos.length} encerrados · Melhor de ${maxSets} · ${cfg.pontosPorSet} pts/set
+        </span>
+      </h2>
+      <div class="tabela-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Rodada</th>
+              <th>Atleta 1</th>
+              <th>Sets<br>1</th>
+              <th>Sets<br>2</th>
+              <th>Atleta 2</th>
+              ${setHeaders}
+              <th>Pts<br>1</th>
+              <th>Pts<br>2</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${grupo.jogos.map((j, ji) => {
+              const agg = getGameAggregate(j);
+              const hasAny = agg.s1 > 0 || agg.s2 > 0;
+              const completo = agg.s1 >= needed || agg.s2 >= needed;
+              const invalido = agg.s1 > needed || agg.s2 > needed;
+              const v1 = agg.s1 > agg.s2 && !invalido;
+              const v2 = agg.s2 > agg.s1 && !invalido;
+
+              let statusText;
+              let rowCls = '';
+              if(!hasAny) statusText = '⏳ Pendente';
+              else if(invalido) statusText = '⚠️ Inválido';
+              else if(completo){ statusText = '✅ Encerrado'; rowCls = 'jogo-encerrado'; }
+              else statusText = '🔄 Em andamento';
+
+              const setCells = Array.from({length: maxSets}, (_, i) => {
+                const s = j.sets && j.sets[i];
+                if(s && (s.p1 > 0 || s.p2 > 0)){
+                  return `<td class="cel-set">${s.p1}-${s.p2}</td>`;
+                }
+                return `<td class="cel-set cel-vazio">—</td>`;
+              }).join('');
+
+              return `
+                <tr data-game-idx="${ji}" class="${rowCls}">
+                  <td class="pos">${j.rodada}</td>
+                  <td style="text-align:left" class="${v1?'jogo-vencedor':''}">${esc(nomePorId(grupo, j.id1))}</td>
+                  <td class="cel-num cel-sets">${agg.s1}</td>
+                  <td class="cel-num cel-sets">${agg.s2}</td>
+                  <td style="text-align:left" class="${v2?'jogo-vencedor':''}">${esc(nomePorId(grupo, j.id2))}</td>${setCells}
+                  <td class="cel-num">${agg.p1}</td>
+                  <td class="cel-num">${agg.p2}</td>
+                  <td>${statusText}</td>
+                </tr>
+              `;
+            }).join('')}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  `;
+}
+
+function renderGrupo(grupo, gi, catConfig){
+  const temPlacar = grupo.jogos && grupo.jogos.some(j =>
+    (j.sets && j.sets.some(s => s && (s.p1 > 0 || s.p2 > 0))) ||
+    (j.s1 || 0) > 0 || (j.s2 || 0) > 0
+  );
+  return `
+    ${renderJogosTable(grupo, gi, catConfig)}
+    <section data-tabela="classificacao" data-grupo="${gi}">
+      <h2>
+        Fase de Grupos — ${esc(grupo.nome)}
+        ${temPlacar ? '<span style="font-weight:400;font-size:.8rem;color:#666;margin-left:8px">📊 Calculado dos jogos</span>' : ''}
+      </h2>
+      <div class="tabela-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Pos</th><th>Atleta</th><th>Clube / Cidade</th>
+              <th>J</th><th>V</th><th>D</th>
+              <th>Sets<br>Pró</th><th>Sets<br>Contra</th><th>Saldo<br>Sets</th>
+              <th>Pts<br>Pró</th><th>Pts<br>Contra</th><th>Saldo<br>Pts</th>
+              <th>Pontos</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${grupo.atletas.map((a, i) => {
+              const ss = (a.sp||0) - (a.sc||0);
+              const sp = (a.pp||0) - (a.pc||0);
+              return `
+                <tr class="${a.status}">
+                  <td class="pos">${i+1}º</td>
+                  <td><span class="nome-atleta">${esc(a.nome)}</span></td>
+                  <td><span class="nome-clube">${esc(a.clube)}</span></td>
+                  <td class="cel-num">${a.j}</td>
+                  <td class="cel-num">${a.v}</td>
+                  <td class="cel-num">${a.d}</td>
+                  <td class="cel-num">${a.sp}</td>
+                  <td class="cel-num">${a.sc}</td>
+                  <td class="saldo">${ss>0?'+':''}${ss}</td>
+                  <td class="cel-num">${a.pp}</td>
+                  <td class="cel-num">${a.pc}</td>
+                  <td class="saldo">${sp>0?'+':''}${sp}</td>
+                  <td class="pts cel-num">${a.pts}</td>
+                </tr>`;
+            }).join('')}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  `;
+}
+
+function renderPartida(p, matchId, destaque){
+  const tied = (p.s1 === p.s2);
+  const v1 = !tied && p.vencedor === 1;
+  const v2 = !tied && p.vencedor === 2;
+  const isFake = p.bye || p.fixed;
+  const fixedAttr = isFake ? 'data-fixed="1"' : '';
+  const extraCls = p.bye ? 'partida-bye' : '';
+  return `
+    <div class="partida ${extraCls}" data-match="${matchId}"
+         ${destaque && !p.bye ? 'style="border-color:var(--amarelo)"' : ''}>
+      <div class="jogador ${v1?'vencedor':''}">
+        <span class="nome-atleta">${esc(p.j1)}</span>
+        <span class="sets set-score" ${fixedAttr}>${p.s1}</span>
+      </div>
+      <div class="jogador ${v2?'vencedor':''}">
+        <span class="nome-atleta">${esc(p.j2)}</span>
+        <span class="sets set-score" ${fixedAttr}>${p.s2}</span>
+      </div>
+    </div>`;
+}
+
+function renderBracket(cat){
+  const cfg = getCatConfig(cat);
+  const vencedorFinal = cat.final.vencedor === 1 ? cat.final.j1 :
+                       (cat.final.vencedor === 2 ? cat.final.j2 : '— A definir —');
+  const vencedorBronze = cat.terceiro.vencedor === 1 ? cat.terceiro.j1 :
+                        (cat.terceiro.vencedor === 2 ? cat.terceiro.j2 : '— A definir —');
+  const numGrupos = cat.grupos.length;
+  const total = cat.grupos.reduce((s,g) => s + g.atletas.length, 0);
+  let notaFase = '';
+  if(numGrupos === 1 && total === 2) notaFase = ' (Final Direta)';
+  else if(numGrupos === 1 && total === 3) notaFase = ' (1º direto · 2º × 3º na semi)';
+  else if(numGrupos === 1) notaFase = ' (Playoff interno)';
+  else if(numGrupos === 2) notaFase = ' (Cruzamento olímpico)';
+  else notaFase = ' (Melhores 4 entre os classificados)';
+  return `
+    <section>
+      <h2>Fase Eliminatória${notaFase}</h2>
+      <div class="bracket">
+        <div class="rodada">
+          <h3>Semifinais</h3>
+          ${renderPartida(cat.semifinais[0], 'semi-0', false)}
+          ${renderPartida(cat.semifinais[1], 'semi-1', false)}
+        </div>
+        <div class="rodada">
+          <h3>Final</h3>
+          ${renderPartida(cat.final, 'final', true)}
+          <div class="final-box">
+            <div class="titulo">🥇 Campeão</div>
+            <strong class="nome-atleta">${esc(vencedorFinal)}</strong>
+            <div style="font-size:.8rem;margin-top:6px;opacity:.8">
+              Placar: ${esc(cat.final.placar)}
+            </div>
+          </div>
+        </div>
+        <div class="rodada">
+          <h3>Disputa de 3º Lugar</h3>
+          ${renderPartida(cat.terceiro, 'terceiro', false)}
+          <div class="partida" style="background:#fff3cd;border-color:var(--amarelo);text-align:center;font-size:.82rem">
+            🥉 <strong class="nome-atleta">${esc(vencedorBronze)}</strong> conquista o bronze
+          </div>
+        </div>
+      </div>
+    </section>`;
+}
+
+function renderCategoria(cat){
+  const cfg = getCatConfig(cat);
+  const totalAtletas = cat.grupos.reduce((s,g) => s + g.atletas.length, 0);
+  return `
+    <div class="cat-controls">
+      <span class="cat-info">
+        <span>📋 Categoria: </span><span class="cat-name">${esc(cat.nome)}</span>
+        <span style="font-weight:400;color:#666;font-size:.85rem;margin-left:8px">
+          · ${cat.grupos.length} grupo(s) · ${totalAtletas} atleta(s)
+        </span>
+        <span class="cat-badge">🎮 Melhor de ${cfg.setsPorPartida} · ${cfg.pontosPorSet} pts/set</span>
+      </span>
+      <div style="display:flex; gap:8px; flex-wrap:wrap;">
+        <button class="btn-edit" style="background:var(--verde);" onclick="abrirModalConfig('${cat.id}')">
+          🎮 Sets e Pontos
+        </button>
+        <button class="btn-edit btn-atletas" onclick="abrirModalAtletas('${cat.id}')">
+          👥 Definir Atletas
+        </button>
+        <button class="btn-edit" id="btn-edit-${cat.id}"
+                onclick="toggleEdit('${cat.id}')">✏️ Editar Categoria</button>
+      </div>
+    </div>
+    ${cat.grupos.map((g, gi) => renderGrupo(g, gi, cfg)).join('')}
+    ${renderBracket(cat)}
+    <section>
+      <div class="legenda">
+        <span><i class="dot class"></i> Classificado para a semifinal</span>
+        <span><i class="dot rep"></i> 3º colocado (repescagem quando aplicável)</span>
+        <span><i class="dot elim"></i> Eliminado</span>
+      </div>
+      <div class="criterios">
+        <strong>⚖️ Critérios de desempate (ITTF / FPTM):</strong>
+        <ol>
+          <li>Confronto direto entre os atletas empatados;</li>
+          <li>Saldo de sets (sets ganhos − sets perdidos);</li>
+          <li>Saldo de pontos (pontos ganhos − pontos perdidos);</li>
+          <li>Novo confronto direto apenas entre os que permanecerem empatados;</li>
+          <li>Sorteio realizado pela Diretoria Técnica da AMIP.</li>
+        </ol>
+        <div style="margin-top:8px;font-size:.8rem;color:#555">
+          <strong>Formato desta categoria:</strong> melhor de ${cfg.setsPorPartida} · sets até ${cfg.pontosPorSet} pontos
+        </div>
+      </div>
+    </section>`;
+}
+
+function renderAll(){
+  if(!CATEGORIAS.find(c => c.id === activeTab)){
+    activeTab = CATEGORIAS[0].id;
+  }
+  renderTabs();
+  document.getElementById('conteudo').innerHTML = CATEGORIAS.map(cat => `
+    <div class="categoria" id="cat-${cat.id}"
+         style="display:${cat.id === activeTab ? 'block' : 'none'}">
+      ${renderCategoria(cat)}
+    </div>
+  `).join('');
+}
+
+/* ============================================================
+   NAVEGAÇÃO (auto-save)
+   ============================================================ */
+function setActiveTab(id){
+  const btnEdit = document.querySelector('.categoria .btn-edit.ativo');
+  if(btnEdit){
+    const catIdEmEdicao = btnEdit.closest('.categoria').id.replace('cat-','');
+    if(catIdEmEdicao !== id) saveCategory(catIdEmEdicao);
+  }
+  activeTab = id;
+  renderAll();
+}
+
+/* ============================================================
+   EDIÇÃO
+   ============================================================ */
+function enterEdit(catId){
+  const container = document.getElementById(`cat-${catId}`);
+  if(!container) return;
+  const cat = CATEGORIAS.find(c => c.id === catId);
+  if(!cat) return;
+
+  const catName = container.querySelector('.cat-name');
+  if(catName){ catName.contentEditable = 'true'; catName.dataset.oldVal = catName.textContent.trim(); }
+
+  cat.grupos.forEach((g, gi) => {
+    const temPlacar = g.jogos && g.jogos.some(j =>
+      (j.sets && j.sets.some(s => s && (s.p1 > 0 || s.p2 > 0))) ||
+      (j.s1 || 0) > 0 || (j.s2 || 0) > 0
+    );
+
+    const gamesSection = container.querySelector(`section[data-tabela="jogos"][data-grupo="${gi}"]`);
+    if(gamesSection){
+      gamesSection.querySelectorAll('td.cel-set').forEach(el => {
+        el.contentEditable = 'true';
+        el.spellcheck = false;
+        el.dataset.oldVal = el.textContent.trim();
+
+        el.addEventListener('focus', function(){
+          if(this.textContent.trim() === '—'){
+            this.textContent = '';
+          }
+          this.classList.remove('cel-vazio');
+        });
+        el.addEventListener('blur', function(){
+          if(!this.textContent.trim()){
+            this.textContent = '—';
+            this.classList.add('cel-vazio');
+          }
+        });
+        el.addEventListener('input', function(){
+          if(this.textContent.trim() && this.textContent.trim() !== '—'){
+            this.classList.remove('cel-vazio');
+          }
+        });
+      });
+    }
+
+    const standingsSection = container.querySelector(`section[data-tabela="classificacao"][data-grupo="${gi}"]`);
+    if(standingsSection){
+      standingsSection.querySelectorAll('.nome-atleta, .nome-clube').forEach(el => {
+        el.contentEditable = 'true';
+        el.dataset.oldVal = el.textContent.trim();
+      });
+      if(!temPlacar){
+        standingsSection.querySelectorAll('.cel-num').forEach(el => {
+          el.contentEditable = 'true';
+          el.dataset.oldVal = el.textContent.trim();
+        });
+      }
+    }
+  });
+
+  container.querySelectorAll('.bracket .set-score').forEach(el => {
+    if(el.dataset.fixed === '1') return;
+    el.contentEditable = 'true';
+    el.dataset.oldVal = el.textContent.trim();
+  });
+
+  const btn = document.getElementById(`btn-edit-${catId}`);
+  if(btn){ btn.classList.add('ativo'); btn.textContent = '💾 Salvar Alterações'; }
+}
+
+/* ============================================================
+   SALVAR
+   ============================================================ */
+function saveCategory(catId){
+  const container = document.getElementById(`cat-${catId}`);
+  if(!container) return;
+  const cat = CATEGORIAS.find(c => c.id === catId);
+  if(!cat) return;
+
+  const cfg = getCatConfig(cat);
+  const maxSets = cfg.setsPorPartida;
+
+  const catNameEl = container.querySelector('.cat-name');
+  if(catNameEl){
+    const novoNome = catNameEl.textContent.trim();
+    if(novoNome) cat.nome = novoNome;
+  }
+
+  cat.grupos.forEach((g, gi) => {
+    const temPlacarAntes = g.jogos && g.jogos.some(j =>
+      (j.sets && j.sets.some(s => s && (s.p1 > 0 || s.p2 > 0))) ||
+      (j.s1 || 0) > 0 || (j.s2 || 0) > 0
+    );
+
+    const standingsSection = container.querySelector(`section[data-tabela="classificacao"][data-grupo="${gi}"]`);
+    if(standingsSection){
+      const rows = standingsSection.querySelectorAll('tbody tr');
+      rows.forEach((row, ai) => {
+        const cells = row.querySelectorAll('td');
+        const a = g.atletas[ai];
+        if(!a) return;
+        a.nome  = cells[1].querySelector('.nome-atleta').textContent.trim();
+        a.clube = cells[2].querySelector('.nome-clube').textContent.trim();
+        if(!temPlacarAntes){
+          a.j   = parseInt(cells[3].textContent)  || 0;
+          a.v   = parseInt(cells[4].textContent)  || 0;
+          a.d   = parseInt(cells[5].textContent)  || 0;
+          a.sp  = parseInt(cells[6].textContent)  || 0;
+          a.sc  = parseInt(cells[7].textContent)  || 0;
+          a.pp  = parseInt(cells[9].textContent)  || 0;
+          a.pc  = parseInt(cells[10].textContent) || 0;
+          a.pts = parseInt(cells[12].textContent) || 0;
+        }
+      });
+    }
+
+    const gamesSection = container.querySelector(`section[data-tabela="jogos"][data-grupo="${gi}"]`);
+    if(gamesSection && g.jogos){
+      const rows = gamesSection.querySelectorAll('tbody tr');
+      rows.forEach(row => {
+        const idx = parseInt(row.dataset.gameIdx);
+        if(isNaN(idx) || !g.jogos[idx]) return;
+        const cells = row.querySelectorAll('td');
+        const newSets = [];
+        for(let i = 0; i < maxSets; i++){
+          const cell = cells[5 + i];
+          if(!cell){ newSets.push(null); continue; }
+          const parsed = parseSetCell(cell.textContent);
+          newSets.push(parsed);
+        }
+        while(newSets.length > 0 && newSets[newSets.length - 1] === null){
+          newSets.pop();
+        }
+        g.jogos[idx].sets = newSets;
+      });
+    }
+
+    recalcularClassificacaoDoGrupo(g);
+
+    g.atletas.sort(cmpAtletas);
+    g.atletas.forEach((a, i) => {
+      if(i < 2) a.status = 'classificado';
+      else if(i === 2) a.status = 'repescagem';
+      else a.status = 'eliminado';
+    });
+  });
+
+  const bracket = container.querySelector('.bracket');
+
+  ['semi-0', 'semi-1'].forEach((mid, i) => {
+    const el = bracket.querySelector(`[data-match="${mid}"]`);
+    if(el){
+      const sc = el.querySelectorAll('.set-score');
+      if(sc[0] && sc[0].dataset.fixed !== '1' && sc[1] && sc[1].dataset.fixed !== '1'){
+        cat.semifinais[i].s1 = parseInt(sc[0].textContent) || 0;
+        cat.semifinais[i].s2 = parseInt(sc[1].textContent) || 0;
+      }
+    }
+  });
+  const finalEl = bracket.querySelector('[data-match="final"]');
+  if(finalEl){
+    const sc = finalEl.querySelectorAll('.set-score');
+    if(sc[0] && sc[0].dataset.fixed !== '1'){
+      cat.final.s1 = parseInt(sc[0].textContent) || 0;
+      cat.final.s2 = parseInt(sc[1].textContent) || 0;
+    }
+  }
+  const thirdEl = bracket.querySelector('[data-match="terceiro"]');
+  if(thirdEl){
+    const sc = thirdEl.querySelectorAll('.set-score');
+    if(sc[0] && sc[0].dataset.fixed !== '1'){
+      cat.terceiro.s1 = parseInt(sc[0].textContent) || 0;
+      cat.terceiro.s2 = parseInt(sc[1].textContent) || 0;
+    }
+  }
+
+  const novasSemis = computeSemifinalTeams(cat);
+  cat.semifinais.forEach((semi, i) => {
+    const nova = novasSemis[i];
+    if(semi.j1 !== nova.j1 || semi.j2 !== nova.j2){
+      semi.s1 = 0; semi.s2 = 0; semi.vencedor = 0;
+    }
+    semi.j1 = nova.j1;
+    semi.j2 = nova.j2;
+    semi.finalDireta = nova.finalDireta || false;
+    semi.bye = nova.bye || false;
+    semi.byeJogador = nova.byeJogador;
+
+    if(semi.finalDireta || semi.bye){
+      semi.vencedor = semi.finalDireta
+        ? (semi.s1 === semi.s2 ? 0 : (semi.s1 > semi.s2 ? 1 : 2))
+        : 0;
+    } else {
+      semi.vencedor = semi.s1 === semi.s2 ? 0 : (semi.s1 > semi.s2 ? 1 : 2);
+    }
+  });
+
+  const semi0 = cat.semifinais[0];
+  const semi1 = cat.semifinais[1];
+  let novoFinalJ1, novoFinalJ2, novoTercJ1, novoTercJ2;
+  let finalFixed = false, terceiroFixed = false;
+
+  if(semi0.finalDireta){
+    const vencedorSemi0 = semi0.vencedor === 1 ? semi0.j1 :
+                         (semi0.vencedor === 2 ? semi0.j2 : '— A definir —');
+    const perdedorSemi0 = semi0.vencedor === 1 ? semi0.j2 :
+                         (semi0.vencedor === 2 ? semi0.j1 : '— A definir —');
+    novoFinalJ1 = vencedorSemi0;
+    novoFinalJ2 = '— (final direta) —';
+    novoTercJ1 = perdedorSemi0;
+    novoTercJ2 = '— (sem disputa) —';
+    finalFixed = true;
+    terceiroFixed = true;
+  } else if(semi1.bye){
+    const vencedorSemi0 = semi0.vencedor === 1 ? semi0.j1 :
+                         (semi0.vencedor === 2 ? semi0.j2 : '— A definir —');
+    const perdedorSemi0 = semi0.vencedor === 1 ? semi0.j2 :
+                         (semi0.vencedor === 2 ? semi0.j1 : '— A definir —');
+    novoFinalJ1 = semi1.byeJogador;
+    novoFinalJ2 = vencedorSemi0;
+    novoTercJ1 = perdedorSemi0;
+    novoTercJ2 = '— (sem disputa) —';
+    terceiroFixed = true;
+  } else {
+    const sv0 = semi0.vencedor;
+    const sv1 = semi1.vencedor;
+    novoFinalJ1 = sv0 === 1 ? semi0.j1 : sv0 === 2 ? semi0.j2 : '— A definir —';
+    novoFinalJ2 = sv1 === 1 ? semi1.j1 : sv1 === 2 ? semi1.j2 : '— A definir —';
+    novoTercJ1 = sv0 === 1 ? semi0.j2 : sv0 === 2 ? semi0.j1 : '— A definir —';
+    novoTercJ2 = sv1 === 1 ? semi1.j2 : sv1 === 2 ? semi1.j1 : '— A definir —';
+  }
+
+  if(cat.final.j1 !== novoFinalJ1 || cat.final.j2 !== novoFinalJ2){
+    cat.final.s1 = 0; cat.final.s2 = 0;
+  }
+  cat.final.j1 = novoFinalJ1;
+  cat.final.j2 = novoFinalJ2;
+  cat.final.fixed = finalFixed;
+  if(finalFixed){
+    cat.final.vencedor = 1;
+  } else {
+    cat.final.vencedor = cat.final.s1 === cat.final.s2 ? 0 : (cat.final.s1 > cat.final.s2 ? 1 : 2);
+  }
+
+  if(cat.terceiro.j1 !== novoTercJ1 || cat.terceiro.j2 !== novoTercJ2){
+    cat.terceiro.s1 = 0; cat.terceiro.s2 = 0;
+  }
+  cat.terceiro.j1 = novoTercJ1;
+  cat.terceiro.j2 = novoTercJ2;
+  cat.terceiro.fixed = terceiroFixed;
+  if(terceiroFixed){
+    cat.terceiro.vencedor = 1;
+  } else {
+    cat.terceiro.vencedor = cat.terceiro.s1 === cat.terceiro.s2 ? 0 : (cat.terceiro.s1 > cat.terceiro.s2 ? 1 : 2);
+  }
+
+  salvar();
+  renderAll();
+}
+
+function toggleEdit(catId){
+  const btn = document.getElementById(`btn-edit-${catId}`);
+  if(btn && btn.classList.contains('ativo')) saveCategory(catId);
+  else enterEdit(catId);
+}
+
+/* ============================================================
+   MODAL ATLETAS
+   ============================================================ */
+let modalCatId = null;
+let modalAtletasTmp = [];
+let modalNomesTmp = [];
+
+function abrirModalAtletas(catId){
+  const btnBefore = document.getElementById(`btn-edit-${catId}`);
+  if(btnBefore && btnBefore.classList.contains('ativo')){
+    saveCategory(catId);
+    const btnAfter = document.getElementById(`btn-edit-${catId}`);
+    if(btnAfter && btnAfter.classList.contains('ativo')) return;
+  }
+
+  const cat = CATEGORIAS.find(c => c.id === catId);
+  if(!cat) return;
+
+  const all = [];
+  cat.grupos.forEach(g => g.atletas.forEach(a => all.push({...a})));
+
+  modalCatId = catId;
+  modalAtletasTmp = all;
+  modalNomesTmp = all.map(a => a.nome);
+
+  document.getElementById('modal-cat-nome').textContent = cat.nome;
+  document.getElementById('modal-qtd-atletas').value = all.length;
+  atualizarListaNomes();
+  document.getElementById('modal-atletas').style.display = 'flex';
+  document.getElementById('modal-qtd-atletas').focus();
+}
+
+function atualizarListaNomes(){
+  const input = document.getElementById('modal-qtd-atletas');
+  let qtd = parseInt(input.value);
+  if(isNaN(qtd) || qtd < 2) qtd = 2;
+  if(qtd > 32) qtd = 32;
+
+  const currentInputs = document.querySelectorAll('#modal-lista-nomes .nome-input');
+  currentInputs.forEach((inp, i) => { modalNomesTmp[i] = inp.value; });
+
+  const container = document.getElementById('modal-lista-nomes');
+  const rows = [];
+  for(let i = 0; i < qtd; i++){
+    let nome = (modalNomesTmp[i] || '').trim();
+    if(!nome){
+      if(i < modalAtletasTmp.length) nome = modalAtletasTmp[i].nome;
+      else {
+        const letra = String.fromCharCode(65 + Math.floor(i/2));
+        const num = (i % 2) + 1;
+        nome = `Atleta ${letra}${num}`;
+      }
+    }
+    rows.push(`
+      <div class="nome-input-row">
+        <span class="nome-input-label">${i+1}º</span>
+        <input type="text" class="nome-input" value="${esc(nome)}">
+      </div>
+    `);
+  }
+  container.innerHTML = rows.join('');
+}
+
+function salvarModalAtletas(){
+  const cat = CATEGORIAS.find(c => c.id === modalCatId);
+  if(!cat) return;
+
+  const qtd = parseInt(document.getElementById('modal-qtd-atletas').value);
+  if(isNaN(qtd) || qtd < 2 || qtd > 32){
+    alert('Quantidade inválida. Informe um número inteiro entre 2 e 32.');
+    return;
+  }
+
+  const inputs = document.querySelectorAll('#modal-lista-nomes .nome-input');
+  inputs.forEach((inp, i) => { modalNomesTmp[i] = inp.value; });
+
+  const nomes = [];
+  for(let i = 0; i < qtd; i++){
+    let nome = (modalNomesTmp[i] || '').trim();
+    if(!nome){
+      if(i < modalAtletasTmp.length) nome = modalAtletasTmp[i].nome;
+      else {
+        const letra = String.fromCharCode(65 + Math.floor(i/2));
+        const num = (i % 2) + 1;
+        nome = `Atleta ${letra}${num}`;
+      }
+    }
+    nomes.push(nome);
+  }
+
+  const nomesIguais = nomes.length === modalAtletasTmp.length
+    && nomes.every((n, i) => n === modalAtletasTmp[i].nome);
+  if(nomesIguais){
+    fecharModalAtletas();
+    return;
+  }
+
+  const newAtletas = nomes.map((nome, i) => {
+    const old = modalAtletasTmp[i];
+    return makeAthlete(nome, old?.clube || '—', old?.id);
+  });
+
+  const sizes = calcularGrupos(qtd);
+  if(!sizes){
+    alert('Erro ao distribuir atletas.');
+    return;
+  }
+
+  let idx = 0;
+  const grupos = sizes.map((size, gi) => {
+    const atletas = newAtletas.slice(idx, idx + size);
+    idx += size;
+    atletas.forEach((a, i) => {
+      if(i < 2) a.status = 'classificado';
+      else if(i === 2) a.status = 'repescagem';
+      else a.status = 'eliminado';
+    });
+    return {
+      nome: `Grupo ${String.fromCharCode(65 + gi)}`,
+      atletas,
+      jogos: gerarJogos(atletas)
+    };
+  });
+
+  cat.grupos = grupos;
+
+  const semis = computeSemifinalTeams(cat);
+  semis.forEach((s, i) => {
+    cat.semifinais[i] = {
+      j1: s.j1, j2: s.j2, s1: 0, s2: 0, vencedor: 0,
+      finalDireta: s.finalDireta || false,
+      bye: s.bye || false,
+      byeJogador: s.byeJogador
+    };
+  });
+  cat.final = {j1:'— A definir —', j2:'— A definir —', s1:0, s2:0, vencedor:0, placar:'—', fixed:false};
+  cat.terceiro = {j1:'— A definir —', j2:'— A definir —', s1:0, s2:0, vencedor:0, fixed:false};
+
+  salvar();
+  fecharModalAtletas();
+  renderAll();
+}
+
+function fecharModalAtletas(){
+  document.getElementById('modal-atletas').style.display = 'none';
+  modalCatId = null;
+  modalAtletasTmp = [];
+  modalNomesTmp = [];
+}
+
+document.addEventListener('keydown', function(e){
+  if(e.key !== 'Escape') return;
+  const mAtletas = document.getElementById('modal-atletas');
+  const mConfig  = document.getElementById('modal-config');
+  if(mAtletas && mAtletas.style.display === 'flex') fecharModalAtletas();
+  if(mConfig  && mConfig.style.display  === 'flex') fecharModalConfig();
+});
+
+/* ============================================================
+   INICIALIZAÇÃO
+   ============================================================ */
+carregar();
+renderAll();
+</script>
+</body>
+</html>
